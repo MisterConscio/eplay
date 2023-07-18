@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import styled from 'styled-components'
 import { colors } from '../../styles'
 
@@ -8,7 +10,7 @@ const Head = styled.header`
   background-color: ${colors.grey};
   padding: 24px;
   border-radius: 16px;
-  margin-bottom: 80px;
+  margin-block: 40px 80px;
 
   display: flex;
   align-items: center;
@@ -47,11 +49,13 @@ const CartLinks = styled.div`
 
 const Header = () => (
   <Head>
-    <img src={logo} alt="EPLAY" />
+    <Link to="/">
+      <img src={logo} alt="EPLAY" />
+    </Link>
     <nav>
       <Links>
         <LinkItem>
-          <a href="#">Categorias</a>
+          <Link to="/categories">Categorias</Link>
         </LinkItem>
         <LinkItem>
           <a href="#">Novidades</a>

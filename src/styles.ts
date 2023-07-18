@@ -4,7 +4,8 @@ export const colors = {
   grey: '#333',
   black: '#111',
   white: '#eee',
-  green: '#10AC84'
+  green: '#10AC84',
+  lightgrey: '#A3A3A3'
 }
 
 export const GlobalCss = createGlobalStyle`
@@ -32,6 +33,5 @@ export const GlobalCss = createGlobalStyle`
   .container {
     max-width: 1024px;
     margin-inline: auto;
-    margin-top: 40px;
   }
 `
