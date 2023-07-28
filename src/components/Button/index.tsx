@@ -4,16 +4,20 @@ import styled from 'styled-components'
 
 import { colors } from '../../styles'
 
-const Btn = styled.button`
-  border: 2px solid ${colors.white};
+const Btn = styled.button<Props>`
+  border: 2px solid
+    ${(props) => (props.variant === 'primary' ? colors.green : colors.white)};
   border-radius: 8px;
   padding: 8px 16px;
 
-  background-color: transparent;
+  background-color: ${(props) =>
+    props.variant === 'primary' ? colors.green : colors.white};
   color: ${colors.white};
 
   font-size: 16px;
   font-weight: bold;
+
+  cursor: pointer;
 `
 
 const BtnLink = styled(Link)`
@@ -36,12 +40,20 @@ type Props = {
   children: string
   to?: string
   onClick?: MouseEventHandler
+  variant?: 'primary' | 'secondary' | undefined
 }
 
-const Button = ({ type = 'button', title, children, to, onClick }: Props) => {
+const Button = ({
+  type = 'button',
+  title,
+  children,
+  to,
+  onClick,
+  variant = 'primary'
+}: Props) => {
   if (type === 'button') {
     return (
-      <Btn onClick={onClick} title={title}>
+      <Btn variant={variant} type={type} onClick={onClick} title={title}>
         {children}
       </Btn>
     )
