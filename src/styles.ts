@@ -20,14 +20,19 @@ export const GlobalCss = createGlobalStyle`
     list-style: none;
   }
 
-  img {
+  img, iframe {
     display: block;
+    max-width: 100%;
   }
 
   body {
     font-family: Roboto, sans-serif;
     background-color: ${colors.black};
     color: ${colors.white};
+  }
+
+  ul {
+    padding-left: 0;
   }
 
   .container {

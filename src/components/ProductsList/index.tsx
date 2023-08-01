@@ -1,7 +1,13 @@
 import styled from 'styled-components'
 import Game from '../../models/Games'
-import { colors } from '../../styles'
-import Product, { Card } from '../Product'
+import Product from '../Product'
+import { Container } from '../Section'
+
+type Props = {
+  title: string
+  background: 'gray' | 'black'
+  games: Game[]
+}
 
 const List = styled.ul`
   padding-left: 0;
@@ -11,29 +17,6 @@ const List = styled.ul`
   grid-template-columns: repeat(4, 1fr);
   column-gap: 24px;
 `
-
-//prettier-ignore
-const Container = styled.section<Omit<Props, 'title' | 'games'>>`
-  padding: 32px 0;
-
-  background-color: ${(props) =>
-    props.background === 'black' ? colors.black : colors.grey};
-
-  h2 {
-    font-size: 18px;
-  }
-
-  ${Card} {
-    background-color: ${(props) =>
-    props.background === 'black' ? colors.grey : colors.black};
-  }
-`
-
-type Props = {
-  title: string
-  background: 'gray' | 'black'
-  games: Game[]
-}
 
 const ProductsList = ({ title, background, games }: Props) => (
   <Container background={background}>
