@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import bannerImg from '../../assets/images/fundo_hogwarts.png'
+import { Game } from '../../pages/Home'
 import { colors } from '../../styles'
 import Button from '../Button'
+import { priceFormat } from '../ProductsList'
 import Tag, { Tagger } from '../Tag'
 
 const Banner = styled.div`
@@ -12,7 +13,6 @@ const Banner = styled.div`
 
   position: relative;
 
-  background-image: url(${bannerImg});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
@@ -62,28 +62,40 @@ const Infos = styled.div`
   }
 `
 
-const Hero = () => {
+type Props = {
+  game: Game
+}
+
+const Hero = ({ game }: Props) => {
   return (
-    <Banner>
+    <Banner style={{ backgroundImage: `url(${game.media.cover})` }}>
       <div className="container">
         <div>
-          <Tag>RPG</Tag>
-          <Tag>PS5</Tag>
+          <Tag>{game.details.category}</Tag>
+          <Tag>{game.details.system}</Tag>
         </div>
         <Infos>
-          <h2>Hogwarts Legacy</h2>
+          <h2>{game.name}</h2>
           <p>
-            De <del>R$250,00</del>
-            <br />
-            Por R$ 190,00
+            {game.prices.discount && (
+              <span>
+                De <del>{priceFormat(game.prices.old)}</del>
+                <br />
+              </span>
+            )}
+            {game.prices.current && (
+              <>
+                Por {priceFormat(game.prices.current)}
+                <Button
+                  title="Adicionar jogo ao carrinho"
+                  type="button"
+                  variant="primary"
+                >
+                  Adicionar ao carrinho
+                </Button>
+              </>
+            )}
           </p>
-          <Button
-            title="Adicionar jogo ao carrinho"
-            type="button"
-            variant="primary"
-          >
-            Adicionar ao carrinho
-          </Button>
         </Infos>
       </div>
     </Banner>

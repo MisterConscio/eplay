@@ -6,10 +6,7 @@ import play from '../../assets/images/play.png'
 import zoom from '../../assets/images/zoom.png'
 import close from '../../assets/images/fechar.png'
 
-import resident from '../../assets/images/resident.png'
-import zelda from '../../assets/images/zelda.png'
-import diablo from '../../assets/images/diablo.png'
-import startwars from '../../assets/images/star_wars.png'
+import { GalleryItem } from '../../pages/Home'
 
 const Items = styled.ul`
   display: flex;
@@ -80,11 +77,6 @@ const ModalContent = styled.div`
   position: relative;
   z-index: 999;
 
-  iframe {
-    width: 100%;
-    height: 50vh;
-  }
-
   header {
     display: flex;
     justify-content: space-between;
@@ -101,34 +93,6 @@ const ModalContent = styled.div`
   }
 `
 
-interface GalleryItem {
-  type: 'image' | 'video'
-  url: string
-}
-
-const mock: GalleryItem[] = [
-  {
-    type: 'image',
-    url: resident
-  },
-  {
-    type: 'image',
-    url: zelda
-  },
-  {
-    type: 'image',
-    url: diablo
-  },
-  {
-    type: 'image',
-    url: startwars
-  },
-  {
-    type: 'video',
-    url: 'https://www.youtube.com/embed/1O6Qstncpnc'
-  }
-]
-
 interface ModalState extends GalleryItem {
   isVisible: boolean
 }
@@ -136,9 +100,10 @@ interface ModalState extends GalleryItem {
 type Props = {
   defaultCover: string
   name: string
+  items: GalleryItem[]
 }
 
-const Gallery = ({ defaultCover, name }: Props) => {
+const Gallery = ({ defaultCover, name, items }: Props) => {
   const [modal, setModal] = useState<ModalState>({
     type: 'video',
     url: '',
@@ -161,7 +126,7 @@ const Gallery = ({ defaultCover, name }: Props) => {
   return (
     <>
       <Items>
-        {mock.map((item) => (
+        {items.map((item) => (
           <Item key={item.url} onClick={() => handleModalOpenclick(item)}>
             <img src={getMediaCover(item)} alt={name} />
             <div className="overlay">
@@ -196,7 +161,12 @@ const Gallery = ({ defaultCover, name }: Props) => {
             {modal.type === 'image' ? (
               <img src={modal.url} alt={name} />
             ) : (
-              <iframe frameBorder={0} src={modal.url} />
+              <iframe
+                width="560"
+                height="315"
+                frameBorder={0}
+                src={modal.url}
+              />
             )}
           </ModalContent>
         </div>

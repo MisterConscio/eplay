@@ -1,33 +1,49 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import banner from '../../assets/images/banner-homem-aranha.png'
 import Button from '../Button'
 import Tag, { Tagger } from '../Tag'
 
+import { Game } from '../../pages/Home'
+import { priceFormat } from '../ProductsList'
+
 const Imagem = styled.div`
   display: block;
 
-  background-image: url(${banner});
   background-size: cover;
   background-repeat: no-repeat;
 
   width: 100%;
   height: 560px;
-  padding-top: 340px;
 
   font-weight: bold;
 
   position: relative;
 
   .container {
+    position: relative;
+    padding-top: 340px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+
+    z-index: 1;
   }
 
   ${Tagger} {
     position: absolute;
     top: 32px;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 `
 
@@ -41,22 +57,40 @@ const Precos = styled.p`
   margin-top: 24px;
 `
 
-const Banner = () => (
-  <Imagem>
-    <div className="container">
-      <Tag size="big">Destaque do dia</Tag>
-      <div>
-        <Titulo>Marvel&apos;s Siper-Man: Miles Morales PS4 & PS5</Titulo>
-        <Precos>
-          De <del>R$ 250,00</del> <br />
-          por apenas R$ 99,90
-        </Precos>
+const Banner = () => {
+  const [game, setGame] = useState<Game>()
+
+  useEffect(() => {
+    fetch('https://fake-api-tau.vercel.app/api/eplay/destaque')
+      .then((res) => res.json())
+      .then((res) => setGame(res))
+  }, [])
+
+  if (!game) {
+    return <div>Carregando...</div>
+  }
+
+  return (
+    <Imagem style={{ backgroundImage: `url(${game.media.cover})` }}>
+      <div className="container">
+        <Tag size="big">Destaque do dia</Tag>
+        <div>
+          <Titulo>{game.name}</Titulo>
+          <Precos>
+            De <del>{priceFormat(game.prices.old)}</del> <br />
+            por apenas {priceFormat(game.prices.current)}
+          </Precos>
+        </div>
+        <Button
+          type="link"
+          to={`/product/${game.id}`}
+          title="Aproveitar a promoção"
+        >
+          Aproveitar
+        </Button>
       </div>
-      <Button type="link" to="/produto" title="Aproveitar a promoção">
-        Aproveitar
-      </Button>
-    </div>
-  </Imagem>
-)
+    </Imagem>
+  )
+}
 
 export default Banner
