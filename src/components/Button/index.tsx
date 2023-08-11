@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { colors } from '../../styles'
 
-const Btn = styled.button<Props>`
+export const Btn = styled.button<Props>`
   border: 2px solid
     ${(props) => (props.variant === 'primary' ? colors.green : colors.white)};
   border-radius: 8px;
