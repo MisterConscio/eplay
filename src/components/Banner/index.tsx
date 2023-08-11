@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import banner from '../../assets/images/banner-homem-aranha.png'
 import Button from '../Button'
 import Tag, { Tagger } from '../Tag'
 
