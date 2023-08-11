@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import Button from '../Button'
 import Tag, { Tagger } from '../Tag'
 
-import { Game } from '../../pages/Home'
 import { priceFormat } from '../ProductsList'
+import { useGetFeaturedGameQuery } from '../../services/api'
 
 const Imagem = styled.div`
   display: block;
@@ -57,13 +56,7 @@ const Precos = styled.p`
 `
 
 const Banner = () => {
-  const [game, setGame] = useState<Game>()
-
-  useEffect(() => {
-    fetch('https://fake-api-tau.vercel.app/api/eplay/destaque')
-      .then((res) => res.json())
-      .then((res) => setGame(res))
-  }, [])
+  const { data: game, isLoading } = useGetFeaturedGameQuery()
 
   if (!game) {
     return <div>Carregando...</div>
