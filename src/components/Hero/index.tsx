@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { Game } from '../../pages/Home'
 import { add, open } from '../../store/reducers/cart'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 import Button from '../Button'
 import { priceFormat } from '../ProductsList'
 import Tag, { Tagger } from '../Tag'
@@ -18,6 +18,10 @@ const Banner = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    background-size: cover;
+  }
 
   &::after {
     content: '';

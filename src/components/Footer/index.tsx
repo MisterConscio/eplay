@@ -1,3 +1,4 @@
+import { HashLink } from 'react-router-hash-link'
 import styled from 'styled-components'
 import { colors } from '../../styles'
 
@@ -21,10 +22,11 @@ const Links = styled.ul`
   padding-left: 0;
 
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 `
 
-const Link = styled.a`
+const FootLink = styled(HashLink)`
   text-decoration: none;
   color: ${colors.lightgrey};
   font-size: 14px;
@@ -41,25 +43,19 @@ const Footer = () => (
         <h4>Categorias</h4>
         <Links>
           <li>
-            <Link href="#">RPG</Link>
+            <FootLink to="/categories/#action">Ação</FootLink>
           </li>
           <li>
-            <Link href="#">Ação</Link>
+            <FootLink to="/categories/#sports">Esportes</FootLink>
           </li>
           <li>
-            <Link href="#">Aventura</Link>
+            <FootLink to="/categories/#simulation">Simulação</FootLink>
           </li>
           <li>
-            <Link href="#">Esportes</Link>
+            <FootLink to="/categories/#fight">Luta</FootLink>
           </li>
           <li>
-            <Link href="#">Simulação</Link>
-          </li>
-          <li>
-            <Link href="#">Estrategia</Link>
-          </li>
-          <li>
-            <Link href="#">FPS</Link>
+            <FootLink to="/categories/#rpg">RPG</FootLink>
           </li>
         </Links>
       </nav>
@@ -67,13 +63,10 @@ const Footer = () => (
         <h4>Acesso Rápido</h4>
         <Links>
           <li>
-            <Link href="#">Novidades</Link>
+            <FootLink to="/#soon">Em Breve</FootLink>
           </li>
           <li>
-            <Link href="#">Em Breve</Link>
-          </li>
-          <li>
-            <Link href="#">Promoções</Link>
+            <FootLink to="/#on-sale">Promoções</FootLink>
           </li>
         </Links>
       </nav>

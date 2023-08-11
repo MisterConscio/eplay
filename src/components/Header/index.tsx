@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 import logo from '../../assets/images/logo.svg'
 import carrinho from '../../assets/images/carrinho.svg'
@@ -17,6 +17,10 @@ const Head = styled.header`
 
   display: flex;
   align-items: center;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    display: none;
+  }
 `
 
 const Links = styled.ul`

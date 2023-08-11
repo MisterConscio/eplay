@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Game } from '../../pages/Home'
+import { breakpoints } from '../../styles'
 import Product from '../Product'
 import { Container } from '../Section'
 
@@ -10,6 +11,14 @@ const List = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+
+  @media (max-width: ${breakpoints.desktop}) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
 `
 
 export const priceFormat = (price = 0) => {
@@ -23,9 +32,10 @@ type Props = {
   title: string
   background: 'gray' | 'black'
   games: Game[]
+  id?: string
 }
 
-const ProductsList = ({ title, background, games }: Props) => {
+const ProductsList = ({ title, background, games, id }: Props) => {
   const getGameTags = (game: Game) => {
     const tags = []
 
@@ -37,7 +47,7 @@ const ProductsList = ({ title, background, games }: Props) => {
   }
 
   return (
-    <Container background={background}>
+    <Container id={id} background={background}>
       <div className="container">
         <h2>{title}</h2>
         <List>
