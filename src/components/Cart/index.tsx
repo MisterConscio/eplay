@@ -1,3 +1,5 @@
+import { useDispatch, useSelector } from 'react-redux'
+import { RootReducer } from '../../store'
 import styled from 'styled-components'
 
 import { colors } from '../../styles'
@@ -5,16 +7,8 @@ import fechar from '../../assets/images/fechar.png'
 
 import Button, { Btn } from '../Button'
 import Tag, { Tagger } from '../Tag'
-
-const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  opacity: 0.7;
-`
+import { close, remove } from '../../store/reducers/cart'
+import { priceFormat } from '../ProductsList'
 
 const CartContainer = styled.div`
   position: fixed;
@@ -24,8 +18,22 @@ const CartContainer = styled.div`
   height: 100%;
   width: 100%;
 
-  display: flex;
+  display: none;
   justify-content: flex-end;
+
+  &.is-open {
+    display: flex;
+  }
+`
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.7;
 `
 
 const SideBar = styled.aside`
@@ -70,6 +78,7 @@ const CartItem = styled.li`
   position: relative;
 
   img {
+    aspect-ratio: 1 / 1;
     object-fit: cover;
   }
 
@@ -110,35 +119,45 @@ const CartItem = styled.li`
 `
 
 const Cart = () => {
+  const { isOpen, items } = useSelector((state: RootReducer) => state.cart)
+  const dispatch = useDispatch()
+
+  const closeCart = () => {
+    dispatch(close())
+  }
+
+  const removeCartItem = (id: number) => {
+    dispatch(remove(id))
+  }
+
+  const getTotalPrice = () => {
+    return items.reduce((sum, current) => {
+      return (sum += current.prices.current!)
+    }, 0)
+  }
+
   return (
-    <CartContainer>
-      <Overlay />
+    <CartContainer className={isOpen ? `is-open` : ''}>
+      <Overlay onClick={closeCart} />
       <SideBar>
         <ul>
-          <CartItem>
-            <img src="https://placehold.it/80" alt="thumb" />
-            <div className="cart-content">
-              <h3>Nome do jogo</h3>
-              <Tag>RPG</Tag>
-              <Tag>PS5</Tag>
-              <span>R$ 150,00</span>
-            </div>
-            <button type="button" />
-          </CartItem>
-          <CartItem>
-            <img src="https://placehold.it/80" alt="thumb" />
-            <div className="cart-content">
-              <h3>Nome do jogo</h3>
-              <Tag>RPG</Tag>
-              <Tag>PS5</Tag>
-              <span>R$ 150,00</span>
-            </div>
-            <button type="button" />
-          </CartItem>
+          {items.map((item) => (
+            <CartItem key={item.id}>
+              <img src={item.media.thumbnail} alt={item.name} height={80} />
+              <div className="cart-content">
+                <h3>{item.name}</h3>
+                <Tag>{item.details.category}</Tag>
+                <Tag>{item.details.system}</Tag>
+                <span>{priceFormat(item.prices.current)}</span>
+              </div>
+              <button type="button" onClick={() => removeCartItem(item.id)} />
+            </CartItem>
+          ))}
         </ul>
-        <p className="quantity">2 jogo(s) no carrinho</p>
+        <p className="quantity">{items.length} jogo(s) no carrinho</p>
         <p className="prices">
-          Total de R$ 250,00 <span>Em até 6x sem juros</span>
+          Total de {priceFormat(getTotalPrice())}{' '}
+          <span>Em até 6x sem juros</span>
         </p>
         <Button title="Continuar com a compra" type="button">
           Continuar com a compra

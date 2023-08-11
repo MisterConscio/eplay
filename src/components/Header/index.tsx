@@ -5,6 +5,9 @@ import { colors } from '../../styles'
 
 import logo from '../../assets/images/logo.svg'
 import carrinho from '../../assets/images/carrinho.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { open } from '../../store/reducers/cart'
+import { RootReducer } from '../../store'
 
 const Head = styled.header`
   background-color: ${colors.grey};
@@ -37,6 +40,10 @@ const CartLinks = styled.div`
   align-items: center;
   margin-left: auto;
 
+  a {
+    cursor: pointer;
+  }
+
   > * {
     margin-left: 16px;
   }
@@ -47,31 +54,40 @@ const CartLinks = styled.div`
   }
 `
 
-const Header = () => (
-  <Head>
-    <Link to="/">
-      <img src={logo} alt="EPLAY" />
-    </Link>
-    <nav>
-      <Links>
-        <LinkItem>
-          <Link to="/categories">Categorias</Link>
-        </LinkItem>
-        <LinkItem>
-          <a href="#">Novidades</a>
-        </LinkItem>
-        <LinkItem>
-          <a href="#">Promoções</a>
-        </LinkItem>
-      </Links>
-    </nav>
-    <CartLinks>
-      <span>0 - produto(s)</span>
-      <a href="#">
-        <img src={carrinho} alt="Carrinho" />
-      </a>
-    </CartLinks>
-  </Head>
-)
+const Header = () => {
+  const { items } = useSelector((state: RootReducer) => state.cart)
+  const dispatch = useDispatch()
+
+  const openCart = () => {
+    dispatch(open())
+  }
+
+  return (
+    <Head>
+      <Link to="/">
+        <img src={logo} alt="EPLAY" />
+      </Link>
+      <nav>
+        <Links>
+          <LinkItem>
+            <Link to="/categories">Categorias</Link>
+          </LinkItem>
+          <LinkItem>
+            <a href="#">Novidades</a>
+          </LinkItem>
+          <LinkItem>
+            <a href="#">Promoções</a>
+          </LinkItem>
+        </Links>
+      </nav>
+      <CartLinks>
+        <span>{items.length} - produto(s)</span>
+        <a onClick={openCart}>
+          <img src={carrinho} alt="Carrinho" />
+        </a>
+      </CartLinks>
+    </Head>
+  )
+}
 
 export default Header

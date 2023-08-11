@@ -56,7 +56,7 @@ const Precos = styled.p`
 `
 
 const Banner = () => {
-  const { data: game, isLoading } = useGetFeaturedGameQuery()
+  const { data: game } = useGetFeaturedGameQuery()
 
   if (!game) {
     return <div>Carregando...</div>
