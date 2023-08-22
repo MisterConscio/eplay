@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 import Button from '../../components/Button'
 import Card from '../../components/Card'
@@ -56,83 +58,144 @@ const TabButton = styled.button<{ isActive?: boolean }>`
     props.isActive ? colors.green : colors.black};
 `
 
-const CardForm = () => (
-  <>
-    <Row>
-      <div className="form-control">
-        <label htmlFor="card-owner">Nome do titular do cartão</label>
-        <input id="card-owner" type="text" />
-      </div>
-      <div className="form-control">
-        <label htmlFor="card-owner-cpf">CPF</label>
-        <input id="card-owner-cpf" type="text" />
-      </div>
-    </Row>
-    <Row style={{ marginTop: '24px' }}>
-      <div className="form-control">
-        <label htmlFor="card-name">Nome no cartão</label>
-        <input id="card-name" type="text" />
-      </div>
-      <div className="form-control">
-        <label htmlFor="card-number">Número do cartão</label>
-        <input id="card-number" type="text" />
-      </div>
-      <div className="form-control" style={{ maxWidth: '123px' }}>
-        <label htmlFor="card-expire-month">Mês de vencimento</label>
-        <input id="card-expire-month" type="text" />
-      </div>
-      <div className="form-control" style={{ maxWidth: '123px' }}>
-        <label htmlFor="card-expire-year">Ano de vencimento</label>
-        <input id="card-expire-year" type="text" />
-      </div>
-      <div className="form-control" style={{ maxWidth: '48px' }}>
-        <label htmlFor="card-cvv">CVV</label>
-        <input id="card-cvv" type="number" />
-      </div>
-    </Row>
-    <Row style={{ marginTop: '24px' }}>
-      <div className="form-control" style={{ maxWidth: '150px' }}>
-        <label htmlFor="installments">Parcelamento</label>
-        <select id="installments">
-          <option>1x de R$ 200,00</option>
-          <option>2x de R$ 200,00</option>
-          <option>3x de R$ 200,00</option>
-        </select>
-      </div>
-    </Row>
-  </>
-)
-
 const Checkout = () => {
   const [payWithCard, setPayWithCard] = useState(false)
 
+  const form = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      cpf: '',
+      digitalEmail: '',
+      confirmEmail: '',
+      cardOwner: '',
+      cardOwnerCpf: '',
+      cardName: '',
+      cardNumber: '',
+      cardExpireMonth: '',
+      cardExpireYear: '',
+      cardCvv: '',
+      installments: 1
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .min(5, 'O nome precisa ter pelo menos 5 caracteres')
+        .required('Obrigatório'),
+      cpf: Yup.string()
+        .min(14, 'O cpf precisa ter pelo menos 14 caracteres')
+        .max(14, 'O cpf precisa ter pelo menos 14 caracteres')
+        .required('Obrigatório'),
+      email: Yup.string().email('Email inválido').required('Obrigatório'),
+      digitalEmail: Yup.string()
+        .email('Email inválido')
+        .required('Obrigatório'),
+      confirmEmail: Yup.string()
+        .oneOf([Yup.ref('digitalEmail')], 'Os emails são diferentes')
+        .required('Obrigatório'),
+      cardOwner: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      ),
+      cardOwnerCpf: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      ),
+      cardName: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      ),
+      cardNumber: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      ),
+      cardExpireMonth: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      ),
+      cardExpireYear: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      ),
+      cardCvv: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      ),
+      installments: Yup.string().when((_, schema) =>
+        payWithCard ? schema.required('Obrigatório') : schema
+      )
+    }),
+    onSubmit: (values) => {
+      console.log(values)
+    }
+  })
+
+  const getErrorMessage = (field: string, message?: string) => {
+    const isTouched = field in form.touched
+    const isInvalid = field in form.errors
+
+    if (isTouched && isInvalid) return message
+    return ''
+  }
+
   return (
-    <div className="container">
+    <form onSubmit={form.handleSubmit} className="container">
       <Card title="Dados de cobrança">
         <>
           <Row>
             <div className="form-control">
               <label htmlFor="name">Nome completo</label>
-              <input id="name" type="text" />
+              <input
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                id="name"
+                type="text"
+                value={form.values.name}
+              />
+              <small>{getErrorMessage('name', form.errors.name)}</small>
             </div>
             <div className="form-control">
               <label htmlFor="email">E-mail</label>
-              <input id="email" type="email" />
+              <input
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                id="email"
+                type="email"
+                value={form.values.email}
+              />
+              <small>{getErrorMessage('email', form.errors.email)}</small>
             </div>
             <div className="form-control">
               <label htmlFor="cpf">CPF</label>
-              <input id="cpf" type="text" />
+              <input
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                id="cpf"
+                type="text"
+                value={form.values.cpf}
+              />
+              <small>{getErrorMessage('cpf', form.errors.cpf)}</small>
             </div>
           </Row>
           <h3 className="mg-top-2">Dados de entrega - conteúdo digital</h3>
           <Row>
             <div className="form-control">
-              <label htmlFor="digital-email">E-mail</label>
-              <input id="digital-email" type="email" />
+              <label htmlFor="digitalEmail">E-mail</label>
+              <input
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                id="digitalEmail"
+                type="email"
+                value={form.values.digitalEmail}
+              />
+              <small>
+                {getErrorMessage('digitalEmail', form.errors.digitalEmail)}
+              </small>
             </div>
             <div className="form-control">
-              <label htmlFor="confirm-email">Confirme o e-mail</label>
-              <input id="confirm-email" type="email" />
+              <label htmlFor="confirmEmail">Confirme o e-mail</label>
+              <input
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                id="confirmEmail"
+                type="email"
+                value={form.values.confirmEmail}
+              />
+              <small>
+                {getErrorMessage('confirmEmail', form.errors.confirmEmail)}
+              </small>
             </div>
           </Row>
         </>
@@ -142,6 +205,7 @@ const Checkout = () => {
           <TabButton
             isActive={!payWithCard}
             onClick={() => setPayWithCard(false)}
+            type="button"
           >
             <img src={boletoIcon} alt="Boleto" />
             Boleto Bancário
@@ -149,13 +213,140 @@ const Checkout = () => {
           <TabButton
             isActive={payWithCard}
             onClick={() => setPayWithCard(true)}
+            type="button"
           >
             <img src={cartaoIcon} alt="Cartão" />
             Cartão de Crédito
           </TabButton>
           <div style={{ marginTop: '24px' }}>
             {payWithCard ? (
-              <CardForm />
+              <>
+                <Row>
+                  <div className="form-control">
+                    <label htmlFor="cardOwner">Nome do titular do cartão</label>
+                    <input
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="cardOwner"
+                      type="text"
+                      value={form.values.cardOwner}
+                    />
+                    <small>
+                      {getErrorMessage('cardOwner', form.errors.cardOwner)}
+                    </small>
+                  </div>
+                  <div className="form-control">
+                    <label htmlFor="cardOwnerCpf">CPF</label>
+                    <input
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="cardOwnerCpf"
+                      type="text"
+                      value={form.values.cardOwnerCpf}
+                    />
+                    <small>
+                      {getErrorMessage(
+                        'cardOwnerCpf',
+                        form.errors.cardOwnerCpf
+                      )}
+                    </small>
+                  </div>
+                </Row>
+                <Row style={{ marginTop: '24px' }}>
+                  <div className="form-control">
+                    <label htmlFor="cardName">Nome no cartão</label>
+                    <input
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="cardName"
+                      type="text"
+                      value={form.values.cardName}
+                    />
+                    <small>
+                      {getErrorMessage('cardName', form.errors.cardName)}
+                    </small>
+                  </div>
+                  <div className="form-control">
+                    <label htmlFor="cardNumber">Número do cartão</label>
+                    <input
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="cardNumber"
+                      type="text"
+                      value={form.values.cardNumber}
+                    />
+                    <small>
+                      {getErrorMessage('cardNumber', form.errors.cardNumber)}
+                    </small>
+                  </div>
+                  <div className="form-control" style={{ maxWidth: '123px' }}>
+                    <label htmlFor="cardExpireMonth">Mês de vencimento</label>
+                    <input
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="cardExpireMonth"
+                      type="text"
+                      value={form.values.cardExpireMonth}
+                    />
+                    <small>
+                      {getErrorMessage(
+                        'cardExpireMonth',
+                        form.errors.cardExpireMonth
+                      )}
+                    </small>
+                  </div>
+                  <div className="form-control" style={{ maxWidth: '123px' }}>
+                    <label htmlFor="cardExpireYear">Ano de vencimento</label>
+                    <input
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="cardExpireYear"
+                      type="text"
+                      value={form.values.cardExpireYear}
+                    />
+                    <small>
+                      {getErrorMessage(
+                        'cardExpireYear',
+                        form.errors.cardExpireYear
+                      )}
+                    </small>
+                  </div>
+                  <div className="form-control" style={{ maxWidth: '48px' }}>
+                    <label htmlFor="cardCvv">CVV</label>
+                    <input
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="cardCvv"
+                      type="text"
+                      value={form.values.cardCvv}
+                    />
+                    <small>
+                      {getErrorMessage('cardCvv', form.errors.cardCvv)}
+                    </small>
+                  </div>
+                </Row>
+                <Row style={{ marginTop: '24px' }}>
+                  <div className="form-control" style={{ maxWidth: '150px' }}>
+                    <label htmlFor="installments">Parcelamento</label>
+                    <select
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      id="installments"
+                      value={form.values.installments}
+                    >
+                      <option>1x de R$ 200,00</option>
+                      <option>2x de R$ 200,00</option>
+                      <option>3x de R$ 200,00</option>
+                    </select>
+                    <small>
+                      {getErrorMessage(
+                        'installments',
+                        form.errors.installments
+                      )}
+                    </small>
+                  </div>
+                </Row>
+              </>
             ) : (
               <p>
                 Ao optar por essa forma de pagamento, é importante lembrar que a
@@ -168,10 +359,10 @@ const Checkout = () => {
           </div>
         </>
       </Card>
-      <Button type="button" title="Clique aqui para finalizar a compra">
+      <Button type="submit" title="Clique aqui para finalizar a compra">
         Finalizar comprar
       </Button>
-    </div>
+    </form>
   )
 }
 

@@ -35,7 +35,7 @@ const BtnLink = styled(Link)`
 `
 
 type Props = {
-  type: 'button' | 'link' | undefined
+  type: 'button' | 'link' | 'submit' | undefined
   title: string
   children: string
   to?: string
@@ -51,7 +51,7 @@ const Button = ({
   onClick,
   variant = 'primary'
 }: Props) => {
-  if (type === 'button') {
+  if (type !== 'link') {
     return (
       <Btn variant={variant} type={type} onClick={onClick} title={title}>
         {children}
