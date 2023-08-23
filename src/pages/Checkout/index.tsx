@@ -9,6 +9,7 @@ import Card from '../../components/Card'
 import { colors } from '../../styles'
 import boletoIcon from '../../assets/images/boleto.png'
 import cartaoIcon from '../../assets/images/cartao.png'
+import { usePurchaseMutation } from '../../services/api'
 
 const Row = styled.div`
   display: flex;
@@ -60,6 +61,7 @@ const TabButton = styled.button<{ isActive?: boolean }>`
 
 const Checkout = () => {
   const [payWithCard, setPayWithCard] = useState(false)
+  const [purchase, { isLoading, isError, data }] = usePurchaseMutation()
 
   const form = useFormik({
     initialValues: {
@@ -118,7 +120,39 @@ const Checkout = () => {
       )
     }),
     onSubmit: (values) => {
-      console.log(values)
+      purchase({
+        billing: {
+          document: values.cpf,
+          email: values.email,
+          name: values.name
+        },
+        delivery: {
+          email: values.digitalEmail
+        },
+        payment: {
+          installments: 1,
+          card: {
+            active: payWithCard,
+            code: Number(values.cardCvv),
+            name: values.cardName,
+            number: values.cardNumber,
+            owner: {
+              document: values.cardOwnerCpf,
+              name: values.cardOwner
+            },
+            expires: {
+              month: 1,
+              year: 2023
+            }
+          }
+        },
+        products: [
+          {
+            id: 1,
+            price: 10
+          }
+        ]
+      })
     }
   })
 
