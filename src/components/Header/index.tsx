@@ -17,6 +17,10 @@ const Head = styled.header`
   border-radius: 16px;
   margin-block: 40px 80px;
 
+  h1 {
+    line-height: 0;
+  }
+
   .mob-nav {
     display: none;
 
@@ -139,7 +143,9 @@ const Header = () => {
           <span />
         </HambMenu>
         <Link to="/">
-          <img title="Acessar a home" src={logo} alt="EPLAY" />
+          <h1>
+            <img title="Acessar a home" src={logo} alt="EPLAY" />
+          </h1>
         </Link>
         <nav className="main-nav">
           <Links>
@@ -168,7 +174,7 @@ const Header = () => {
             {items.length}
             <span className="cart-full-info"> - produto(s)</span>
           </span>
-          <a onClick={openCart}>
+          <a role="button" onClick={openCart}>
             <img src={cartIcon} alt="Carrinho" />
           </a>
         </CartLinks>

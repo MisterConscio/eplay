@@ -43,6 +43,13 @@ const SideBar = styled.aside`
   max-width: 360px;
   width: 100%;
 
+  .empty-cart {
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    color: ${colors.white};
+  }
+
   ${Btn} {
     max-with: 100%;
     width: 100%;
@@ -141,32 +148,45 @@ const Cart = () => {
     <CartContainer className={isOpen ? `is-open` : ''}>
       <Overlay onClick={closeCart} />
       <SideBar>
-        <ul>
-          {items.map((item) => (
-            <CartItem key={item.id}>
-              <img src={item.media.thumbnail} alt={item.name} height={80} />
-              <div className="cart-content">
-                <h3>{item.name}</h3>
-                <Tag>{item.details.category}</Tag>
-                <Tag>{item.details.system}</Tag>
-                <span>{parseToBrl(item.prices.current)}</span>
-              </div>
-              <button type="button" onClick={() => removeCartItem(item.id)} />
-            </CartItem>
-          ))}
-        </ul>
-        <p className="quantity">{items.length} jogo(s) no carrinho</p>
-        <p className="prices">
-          Total de {parseToBrl(getTotalPrice(items))}{' '}
-          <span>Em até 6x sem juros</span>
-        </p>
-        <Button
-          onClick={goToCheckout}
-          title="Continuar com a compra"
-          type="button"
-        >
-          Continuar com a compra
-        </Button>
+        {items.length > 0 ? (
+          <>
+            <ul>
+              {items.map((item) => (
+                <CartItem key={item.id}>
+                  <img src={item.media.thumbnail} alt={item.name} height={80} />
+                  <div className="cart-content">
+                    <h3>{item.name}</h3>
+                    <Tag>{item.details.category}</Tag>
+                    <Tag>{item.details.system}</Tag>
+                    <span>{parseToBrl(item.prices.current)}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeCartItem(item.id)}
+                  />
+                </CartItem>
+              ))}
+            </ul>
+            <p className="quantity">{items.length} jogo(s) no carrinho</p>
+            <p className="prices">
+              Total de {parseToBrl(getTotalPrice(items))}{' '}
+              <span>Em até 6x sem juros</span>
+            </p>
+            <Button
+              onClick={goToCheckout}
+              title="Continuar com a compra"
+              type="button"
+            >
+              Continuar com a compra
+            </Button>
+          </>
+        ) : (
+          <p className="empty-cart">
+            O carrinho está vazio
+            <br />
+            <strong>Adicione algum item</strong> para proseguir
+          </p>
+        )}
       </SideBar>
     </CartContainer>
   )

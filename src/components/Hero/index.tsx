@@ -1,11 +1,13 @@
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { Game } from '../../pages/Home'
+
 import { add, open } from '../../store/reducers/cart'
 import { breakpoints, colors } from '../../styles'
+
 import Button from '../Button'
-import { parseToBrl } from '../../utils'
 import Tag, { Tagger } from '../Tag'
+
+import { parseToBrl } from '../../utils'
 
 const Banner = styled.div`
   height: 480px;

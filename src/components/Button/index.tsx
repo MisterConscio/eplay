@@ -41,6 +41,7 @@ type Props = {
   to?: string
   onClick?: MouseEventHandler
   variant?: 'primary' | 'secondary' | undefined
+  disabled?: boolean
 }
 
 const Button = ({
@@ -49,11 +50,18 @@ const Button = ({
   children,
   to,
   onClick,
-  variant = 'primary'
+  variant = 'primary',
+  disabled
 }: Props) => {
   if (type !== 'link') {
     return (
-      <Btn variant={variant} type={type} onClick={onClick} title={title}>
+      <Btn
+        disabled={disabled}
+        variant={variant}
+        type={type}
+        onClick={onClick}
+        title={title}
+      >
         {children}
       </Btn>
     )

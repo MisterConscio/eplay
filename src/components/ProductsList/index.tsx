@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { Game } from '../../pages/Home'
+
 import { breakpoints } from '../../styles'
 import { parseToBrl } from '../../utils'
+
 import Loader from '../Loader'
 import Product from '../Product'
 import { Container } from '../Section'

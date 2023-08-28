@@ -6,8 +6,6 @@ import play from '../../assets/images/play.png'
 import zoom from '../../assets/images/zoom.png'
 import close from '../../assets/images/fechar.png'
 
-import { GalleryItem } from '../../pages/Home'
-
 const Items = styled.ul`
   display: flex;
   flex-wrap: wrap;
