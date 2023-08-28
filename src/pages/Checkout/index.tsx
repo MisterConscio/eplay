@@ -1,7 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { RootReducer } from '../../store'
 
 import Button from '../../components/Button'
 import Card from '../../components/Card'
@@ -10,6 +13,7 @@ import { colors } from '../../styles'
 import barCodeIcon from '../../assets/images/boleto.png'
 import cardIcon from '../../assets/images/cartao.png'
 import { usePurchaseMutation } from '../../services/api'
+import { getTotalPrice, parseToBrl } from '../../utils'
 
 const Row = styled.div`
   display: flex;
@@ -32,6 +36,10 @@ const Row = styled.div`
       padding: 0 8px;
       border: 1px solid ${colors.white};
       background-color: ${colors.white};
+
+      &.error {
+        border: 1px solid red;
+      }
     }
   }
 `
@@ -59,9 +67,34 @@ const TabButton = styled.button<{ isActive?: boolean }>`
     props.isActive ? colors.green : colors.black};
 `
 
+type Installment = {
+  quantity: number
+  amount: number
+  formattedAmount: string
+}
+
 const Checkout = () => {
   const [payWithCard, setPayWithCard] = useState(false)
   const [purchase, { data, isSuccess }] = usePurchaseMutation()
+  const { items } = useSelector((state: RootReducer) => state.cart)
+
+  const [installments, setInstallments] = useState<Installment[]>([])
+
+  const totalPrice = getTotalPrice(items)
+
+  useEffect(() => {
+    if (totalPrice > 0) {
+      const installmentsArray: Installment[] = []
+      for (let i = 1; i <= 6; i++) {
+        installmentsArray.push({
+          quantity: i,
+          amount: totalPrice / i,
+          formattedAmount: parseToBrl(totalPrice / i)
+        })
+      }
+      setInstallments(installmentsArray)
+    }
+  }, [totalPrice])
 
   const form = useFormik({
     initialValues: {
@@ -156,12 +189,17 @@ const Checkout = () => {
     }
   })
 
-  const getErrorMessage = (field: string, message?: string) => {
+  const checkInputHasError = (field: string) => {
     const isTouched = field in form.touched
     const isInvalid = field in form.errors
 
-    if (isTouched && isInvalid) return message
-    return ''
+    const hasError = isTouched && isInvalid
+
+    return hasError
+  }
+
+  if (items.length === 0) {
+    return <Navigate to="/" />
   }
 
   return (
@@ -214,8 +252,8 @@ const Checkout = () => {
                     id="name"
                     type="text"
                     value={form.values.name}
+                    className={checkInputHasError('name') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('name', form.errors.name)}</small>
                 </div>
                 <div className="form-control">
                   <label htmlFor="email">E-mail</label>
@@ -225,8 +263,8 @@ const Checkout = () => {
                     id="email"
                     type="email"
                     value={form.values.email}
+                    className={checkInputHasError('email') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('email', form.errors.email)}</small>
                 </div>
                 <div className="form-control">
                   <label htmlFor="cpf">CPF</label>
@@ -236,8 +274,8 @@ const Checkout = () => {
                     id="cpf"
                     type="text"
                     value={form.values.cpf}
+                    className={checkInputHasError('cpf') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('cpf', form.errors.cpf)}</small>
                 </div>
               </Row>
               <h3 className="mg-top-2">Dados de entrega - conteúdo digital</h3>
@@ -250,10 +288,10 @@ const Checkout = () => {
                     id="digitalEmail"
                     type="email"
                     value={form.values.digitalEmail}
+                    className={
+                      checkInputHasError('digitalEmail') ? 'error' : ''
+                    }
                   />
-                  <small>
-                    {getErrorMessage('digitalEmail', form.errors.digitalEmail)}
-                  </small>
                 </div>
                 <div className="form-control">
                   <label htmlFor="confirmEmail">Confirme o e-mail</label>
@@ -263,10 +301,10 @@ const Checkout = () => {
                     id="confirmEmail"
                     type="email"
                     value={form.values.confirmEmail}
+                    className={
+                      checkInputHasError('confirmEmail') ? 'error' : ''
+                    }
                   />
-                  <small>
-                    {getErrorMessage('confirmEmail', form.errors.confirmEmail)}
-                  </small>
                 </div>
               </Row>
             </>
@@ -303,10 +341,10 @@ const Checkout = () => {
                           id="cardOwner"
                           type="text"
                           value={form.values.cardOwner}
+                          className={
+                            checkInputHasError('cardOwner') ? 'error' : ''
+                          }
                         />
-                        <small>
-                          {getErrorMessage('cardOwner', form.errors.cardOwner)}
-                        </small>
                       </div>
                       <div className="form-control">
                         <label htmlFor="cardOwnerCpf">CPF</label>
@@ -316,13 +354,10 @@ const Checkout = () => {
                           id="cardOwnerCpf"
                           type="text"
                           value={form.values.cardOwnerCpf}
+                          className={
+                            checkInputHasError('cardOwnerCpf') ? 'error' : ''
+                          }
                         />
-                        <small>
-                          {getErrorMessage(
-                            'cardOwnerCpf',
-                            form.errors.cardOwnerCpf
-                          )}
-                        </small>
                       </div>
                     </Row>
                     <Row style={{ marginTop: '24px' }}>
@@ -334,10 +369,10 @@ const Checkout = () => {
                           id="cardName"
                           type="text"
                           value={form.values.cardName}
+                          className={
+                            checkInputHasError('cardName') ? 'error' : ''
+                          }
                         />
-                        <small>
-                          {getErrorMessage('cardName', form.errors.cardName)}
-                        </small>
                       </div>
                       <div className="form-control">
                         <label htmlFor="cardNumber">Número do cartão</label>
@@ -347,13 +382,10 @@ const Checkout = () => {
                           id="cardNumber"
                           type="text"
                           value={form.values.cardNumber}
+                          className={
+                            checkInputHasError('cardNumber') ? 'error' : ''
+                          }
                         />
-                        <small>
-                          {getErrorMessage(
-                            'cardNumber',
-                            form.errors.cardNumber
-                          )}
-                        </small>
                       </div>
                       <div
                         className="form-control"
@@ -368,13 +400,10 @@ const Checkout = () => {
                           id="cardExpireMonth"
                           type="text"
                           value={form.values.cardExpireMonth}
+                          className={
+                            checkInputHasError('cardExpireMonth') ? 'error' : ''
+                          }
                         />
-                        <small>
-                          {getErrorMessage(
-                            'cardExpireMonth',
-                            form.errors.cardExpireMonth
-                          )}
-                        </small>
                       </div>
                       <div
                         className="form-control"
@@ -389,13 +418,10 @@ const Checkout = () => {
                           id="cardExpireYear"
                           type="text"
                           value={form.values.cardExpireYear}
+                          className={
+                            checkInputHasError('cardExpireYear') ? 'error' : ''
+                          }
                         />
-                        <small>
-                          {getErrorMessage(
-                            'cardExpireYear',
-                            form.errors.cardExpireYear
-                          )}
-                        </small>
                       </div>
                       <div
                         className="form-control"
@@ -408,10 +434,10 @@ const Checkout = () => {
                           id="cardCvv"
                           type="text"
                           value={form.values.cardCvv}
+                          className={
+                            checkInputHasError('cardCvv') ? 'error' : ''
+                          }
                         />
-                        <small>
-                          {getErrorMessage('cardCvv', form.errors.cardCvv)}
-                        </small>
                       </div>
                     </Row>
                     <Row style={{ marginTop: '24px' }}>
@@ -425,17 +451,16 @@ const Checkout = () => {
                           onBlur={form.handleBlur}
                           id="installments"
                           value={form.values.installments}
+                          className={
+                            checkInputHasError('installments') ? 'error' : ''
+                          }
                         >
-                          <option>1x de R$ 200,00</option>
-                          <option>2x de R$ 200,00</option>
-                          <option>3x de R$ 200,00</option>
+                          {installments.map((item) => (
+                            <option key={item.quantity}>
+                              {item.quantity}x de {item.formattedAmount}
+                            </option>
+                          ))}
                         </select>
-                        <small>
-                          {getErrorMessage(
-                            'installments',
-                            form.errors.installments
-                          )}
-                        </small>
                       </div>
                     </Row>
                   </>
