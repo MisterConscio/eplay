@@ -1,16 +1,16 @@
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { HashLink } from 'react-router-hash-link'
 
 import styled from 'styled-components'
 import { breakpoints, colors } from '../../styles'
 
 import logo from '../../assets/images/logo.svg'
-import carrinho from '../../assets/images/carrinho.svg'
+import cartIcon from '../../assets/images/carrinho.svg'
 
 import { open } from '../../store/reducers/cart'
 import { RootReducer } from '../../store'
-import { useState } from 'react'
-import { HashLink } from 'react-router-hash-link'
 
 const Head = styled.header`
   padding: 24px;
@@ -169,7 +169,7 @@ const Header = () => {
             <span className="cart-full-info"> - produto(s)</span>
           </span>
           <a onClick={openCart}>
-            <img src={carrinho} alt="Carrinho" />
+            <img src={cartIcon} alt="Carrinho" />
           </a>
         </CartLinks>
       </HeaderRow>

@@ -4,7 +4,7 @@ import { Game } from '../../pages/Home'
 import { add, open } from '../../store/reducers/cart'
 import { breakpoints, colors } from '../../styles'
 import Button from '../Button'
-import { priceFormat } from '../ProductsList'
+import { parseToBrl } from '../../utils'
 import Tag, { Tagger } from '../Tag'
 
 const Banner = styled.div`
@@ -92,13 +92,13 @@ const Hero = ({ game }: Props) => {
           <p>
             {game.prices.discount && (
               <span>
-                De <del>{priceFormat(game.prices.old)}</del>
+                De <del>{parseToBrl(game.prices.old)}</del>
                 <br />
               </span>
             )}
             {game.prices.current && (
               <>
-                Por {priceFormat(game.prices.current)}
+                Por {parseToBrl(game.prices.current)}
                 <Button
                   title="Adicionar jogo ao carrinho"
                   type="button"

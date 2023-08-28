@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import Button from '../Button'
 import Tag, { Tagger } from '../Tag'
 
-import { priceFormat } from '../ProductsList'
+import { parseToBrl } from '../../utils'
 import { useGetFeaturedGameQuery } from '../../services/api'
 
-const Imagem = styled.div`
+const Image = styled.div`
   display: block;
 
   background-size: cover;
@@ -45,7 +45,7 @@ const Imagem = styled.div`
   }
 `
 
-const Titulo = styled.h2`
+const Title = styled.h2`
   font-size: 36px;
   max-width: 450px;
 `
@@ -63,14 +63,14 @@ const Banner = () => {
   }
 
   return (
-    <Imagem style={{ backgroundImage: `url(${game.media.cover})` }}>
+    <Image style={{ backgroundImage: `url(${game.media.cover})` }}>
       <div className="container">
         <Tag size="big">Destaque do dia</Tag>
         <div>
-          <Titulo>{game.name}</Titulo>
+          <Title>{game.name}</Title>
           <Precos>
-            De <del>{priceFormat(game.prices.old)}</del> <br />
-            por apenas {priceFormat(game.prices.current)}
+            De <del>{parseToBrl(game.prices.old)}</del> <br />
+            por apenas {parseToBrl(game.prices.current)}
           </Precos>
         </div>
         <Button
@@ -81,7 +81,7 @@ const Banner = () => {
           Aproveitar
         </Button>
       </div>
-    </Imagem>
+    </Image>
   )
 }
 

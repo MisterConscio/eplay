@@ -8,7 +8,7 @@ import fechar from '../../assets/images/fechar.png'
 import Button, { Btn } from '../Button'
 import Tag, { Tagger } from '../Tag'
 import { close, remove } from '../../store/reducers/cart'
-import { priceFormat } from '../ProductsList'
+import { parseToBrl } from '../../utils'
 
 const CartContainer = styled.div`
   position: fixed;
@@ -148,7 +148,7 @@ const Cart = () => {
                 <h3>{item.name}</h3>
                 <Tag>{item.details.category}</Tag>
                 <Tag>{item.details.system}</Tag>
-                <span>{priceFormat(item.prices.current)}</span>
+                <span>{parseToBrl(item.prices.current)}</span>
               </div>
               <button type="button" onClick={() => removeCartItem(item.id)} />
             </CartItem>
@@ -156,7 +156,7 @@ const Cart = () => {
         </ul>
         <p className="quantity">{items.length} jogo(s) no carrinho</p>
         <p className="prices">
-          Total de {priceFormat(getTotalPrice())}{' '}
+          Total de {parseToBrl(getTotalPrice())}{' '}
           <span>Em até 6x sem juros</span>
         </p>
         <Button title="Continuar com a compra" type="button">

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Game } from '../../pages/Home'
 import { breakpoints } from '../../styles'
+import { parseToBrl } from '../../utils'
 import Product from '../Product'
 import { Container } from '../Section'
 
@@ -21,13 +22,6 @@ const List = styled.ul`
   }
 `
 
-export const priceFormat = (price = 0) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(price)
-}
-
 type Props = {
   title: string
   background: 'gray' | 'black'
@@ -41,7 +35,7 @@ const ProductsList = ({ title, background, games, id }: Props) => {
 
     game.release_date && tags.push(game.release_date)
     game.prices.discount && tags.push(`${game.prices.discount}%`)
-    game.prices.current && tags.push(priceFormat(game.prices.current))
+    game.prices.current && tags.push(parseToBrl(game.prices.current))
 
     return tags
   }

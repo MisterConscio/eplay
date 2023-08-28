@@ -7,8 +7,8 @@ import Button from '../../components/Button'
 import Card from '../../components/Card'
 
 import { colors } from '../../styles'
-import boletoIcon from '../../assets/images/boleto.png'
-import cartaoIcon from '../../assets/images/cartao.png'
+import barCodeIcon from '../../assets/images/boleto.png'
+import cardIcon from '../../assets/images/cartao.png'
 import { usePurchaseMutation } from '../../services/api'
 
 const Row = styled.div`
@@ -278,7 +278,7 @@ const Checkout = () => {
                 onClick={() => setPayWithCard(false)}
                 type="button"
               >
-                <img src={boletoIcon} alt="Boleto" />
+                <img src={barCodeIcon} alt="Boleto" />
                 Boleto Bancário
               </TabButton>
               <TabButton
@@ -286,7 +286,7 @@ const Checkout = () => {
                 onClick={() => setPayWithCard(true)}
                 type="button"
               >
-                <img src={cartaoIcon} alt="Cartão" />
+                <img src={cardIcon} alt="Cartão" />
                 Cartão de Crédito
               </TabButton>
               <div style={{ marginTop: '24px' }}>
