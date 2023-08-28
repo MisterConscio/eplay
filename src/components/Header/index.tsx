@@ -10,6 +10,7 @@ import carrinho from '../../assets/images/carrinho.svg'
 import { open } from '../../store/reducers/cart'
 import { RootReducer } from '../../store'
 import { useState } from 'react'
+import { HashLink } from 'react-router-hash-link'
 
 const Head = styled.header`
   padding: 24px;
@@ -125,6 +126,10 @@ const Header = () => {
     dispatch(open())
   }
 
+  const closeMobMenu = () => {
+    setIsMenuOpen(false)
+  }
+
   return (
     <Head>
       <HeaderRow>
@@ -134,18 +139,27 @@ const Header = () => {
           <span />
         </HambMenu>
         <Link to="/">
-          <img src={logo} alt="EPLAY" />
+          <img title="Acessar a home" src={logo} alt="EPLAY" />
         </Link>
         <nav className="main-nav">
           <Links>
             <LinkItem>
-              <Link to="/categories">Categorias</Link>
+              <Link title="Acessar as categorias de jogos" to="/categories">
+                Categorias
+              </Link>
             </LinkItem>
             <LinkItem>
-              <a href="#">Novidades</a>
+              <HashLink
+                title="Acessar os jogos que sairão em breve"
+                to="/#soon"
+              >
+                Em Breve
+              </HashLink>
             </LinkItem>
             <LinkItem>
-              <a href="#">Promoções</a>
+              <HashLink title="Acessar os jogos em promoção" to="/#on-sale">
+                Promoções
+              </HashLink>
             </LinkItem>
           </Links>
         </nav>
@@ -162,13 +176,19 @@ const Header = () => {
       <nav className={isMenuOpen ? 'is-open mob-nav' : 'mob-nav'}>
         <Links>
           <LinkItem>
-            <Link to="/categories">Categorias</Link>
+            <Link onClick={closeMobMenu} to="/categories">
+              Categorias
+            </Link>
           </LinkItem>
           <LinkItem>
-            <a href="#">Novidades</a>
+            <HashLink onClick={closeMobMenu} to="/#soon">
+              Em Breve
+            </HashLink>
           </LinkItem>
           <LinkItem>
-            <a href="#">Promoções</a>
+            <HashLink onClick={closeMobMenu} to="/#on-sale">
+              Promoções
+            </HashLink>
           </LinkItem>
         </Links>
       </nav>

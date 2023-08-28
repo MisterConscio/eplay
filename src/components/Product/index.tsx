@@ -71,7 +71,7 @@ const Product = ({
   }
 
   return (
-    <Card to={`/product/${id}`}>
+    <Card title={`Mais detalhes sobre ${title}`} to={`/product/${id}`}>
       <img src={image} alt={title} />
       <div className="infos">
         {infos.map((info, index) => (

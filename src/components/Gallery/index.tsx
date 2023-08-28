@@ -16,6 +16,8 @@ const Items = styled.ul`
 
 const Item = styled.li`
   position: relative;
+  cursor: -webkit-zoom-in;
+  cursor: zoom-in;
 
   > img {
     border: 2px solid ${colors.white};

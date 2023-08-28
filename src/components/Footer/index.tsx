@@ -44,19 +44,35 @@ const Footer = () => (
         <h4>Categorias</h4>
         <Links>
           <li>
-            <FootLink to="/categories/#action">Ação</FootLink>
+            <FootLink title="Acessar jogos de ação" to="/categories/#action">
+              Ação
+            </FootLink>
           </li>
           <li>
-            <FootLink to="/categories/#sports">Esportes</FootLink>
+            <FootLink
+              title="Acessar jogos de esportes"
+              to="/categories/#sports"
+            >
+              Esportes
+            </FootLink>
           </li>
           <li>
-            <FootLink to="/categories/#simulation">Simulação</FootLink>
+            <FootLink
+              title="Acessar jogos de simulação"
+              to="/categories/#simulation"
+            >
+              Simulação
+            </FootLink>
           </li>
           <li>
-            <FootLink to="/categories/#fight">Luta</FootLink>
+            <FootLink title="Acessar jogos de luta" to="/categories/#fight">
+              Luta
+            </FootLink>
           </li>
           <li>
-            <FootLink to="/categories/#rpg">RPG</FootLink>
+            <FootLink title="Acessar jogos de rpg" to="/categories/#rpg">
+              RPG
+            </FootLink>
           </li>
         </Links>
       </nav>
@@ -64,10 +80,14 @@ const Footer = () => (
         <h4>Acesso Rápido</h4>
         <Links>
           <li>
-            <FootLink to="/#soon">Em Breve</FootLink>
+            <FootLink title="Acessar jogos que sairão em breve" to="/#soon">
+              Em Breve
+            </FootLink>
           </li>
           <li>
-            <FootLink to="/#on-sale">Promoções</FootLink>
+            <FootLink title="Acessar jogos em promoção" to="/#on-sale">
+              Promoções
+            </FootLink>
           </li>
         </Links>
       </nav>
