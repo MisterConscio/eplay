@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Game } from '../../pages/Home'
 import { breakpoints } from '../../styles'
 import { parseToBrl } from '../../utils'
+import Loader from '../Loader'
 import Product from '../Product'
 import { Container } from '../Section'
 
@@ -25,11 +26,12 @@ const List = styled.ul`
 type Props = {
   title: string
   background: 'gray' | 'black'
-  games: Game[]
+  games?: Game[]
   id?: string
+  isLoading: boolean
 }
 
-const ProductsList = ({ title, background, games, id }: Props) => {
+const ProductsList = ({ title, background, games, id, isLoading }: Props) => {
   const getGameTags = (game: Game) => {
     const tags = []
 
@@ -40,24 +42,29 @@ const ProductsList = ({ title, background, games, id }: Props) => {
     return tags
   }
 
+  if (isLoading) {
+    return <Loader />
+  }
+
   return (
     <Container id={id} background={background}>
       <div className="container">
         <h2>{title}</h2>
         <List>
-          {games.map((item) => (
-            <li key={item.id}>
-              <Product
-                category={item.details.category}
-                title={item.name}
-                system={item.details.system}
-                desc={item.description}
-                infos={getGameTags(item)}
-                image={item.media.thumbnail}
-                id={item.id}
-              />
-            </li>
-          ))}
+          {games &&
+            games.map((item) => (
+              <li key={item.id}>
+                <Product
+                  category={item.details.category}
+                  title={item.name}
+                  system={item.details.system}
+                  desc={item.description}
+                  infos={getGameTags(item)}
+                  image={item.media.thumbnail}
+                  id={item.id}
+                />
+              </li>
+            ))}
         </List>
       </div>
     </Container>

@@ -9,21 +9,14 @@ import {
 } from '../../services/api'
 
 const Categories = () => {
-  const { data: actionGames } = useGetActionGameQuery()
-  const { data: sportsGames } = useGetSportsGameQuery()
-  const { data: simulationGames } = useGetSimulationGameQuery()
-  const { data: fightGames } = useGetFightGameQuery()
-  const { data: rpgGames } = useGetRpgGameQuery()
-
-  if (
-    !actionGames ||
-    !sportsGames ||
-    !simulationGames ||
-    !fightGames ||
-    !rpgGames
-  ) {
-    return <h4>Carregando...</h4>
-  }
+  const { isLoading: isActionLoading, data: actionGames } =
+    useGetActionGameQuery()
+  const { isLoading: isSportsLoading, data: sportsGames } =
+    useGetSportsGameQuery()
+  const { isLoading: isSimuLoading, data: simulationGames } =
+    useGetSimulationGameQuery()
+  const { isLoading: isFightLoading, data: fightGames } = useGetFightGameQuery()
+  const { isLoading: isRpgLoading, data: rpgGames } = useGetRpgGameQuery()
 
   return (
     <>
@@ -32,26 +25,36 @@ const Categories = () => {
         title="Ação"
         background="black"
         games={actionGames}
+        isLoading={isActionLoading}
       />
       <ProductsList
         id="sports"
         title="Esportes"
         background="gray"
         games={sportsGames}
+        isLoading={isSportsLoading}
       />
       <ProductsList
         id="simulation"
         title="Simulação"
         background="black"
         games={simulationGames}
+        isLoading={isSimuLoading}
       />
       <ProductsList
         id="fight"
         title="Luta"
         background="gray"
         games={fightGames}
+        isLoading={isFightLoading}
       />
-      <ProductsList id="rpg" title="RPG" background="black" games={rpgGames} />
+      <ProductsList
+        id="rpg"
+        title="RPG"
+        background="black"
+        games={rpgGames}
+        isLoading={isRpgLoading}
+      />
     </>
   )
 }

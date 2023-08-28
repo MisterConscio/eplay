@@ -156,6 +156,9 @@ const Gallery = ({ defaultCover, name, items }: Props) => {
             <header>
               <h4>{name}</h4>
               <img
+                style={{ cursor: 'pointer' }}
+                width={16}
+                height={16}
                 src={close}
                 alt="Fechar"
                 onClick={() => setModal({ ...modal, isVisible: false })}

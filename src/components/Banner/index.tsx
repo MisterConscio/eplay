@@ -5,6 +5,7 @@ import Tag, { Tagger } from '../Tag'
 
 import { parseToBrl } from '../../utils'
 import { useGetFeaturedGameQuery } from '../../services/api'
+import Loader from '../Loader'
 
 const Image = styled.div`
   display: block;
@@ -59,7 +60,7 @@ const Banner = () => {
   const { data: game } = useGetFeaturedGameQuery()
 
   if (!game) {
-    return <div>Carregando...</div>
+    return <Loader />
   }
 
   return (
